@@ -24,14 +24,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Selector de país
+    // Selector de país con soporte ARIA
     const countryOptions = document.querySelectorAll('.country-option');
     countryOptions.forEach(option => {
         option.addEventListener('click', function() {
             // Remover selección anterior
-            countryOptions.forEach(opt => opt.classList.remove('selected'));
+            countryOptions.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.setAttribute('aria-checked', 'false');
+                opt.setAttribute('tabindex', '-1');
+            });
             // Agregar selección a la opción clickeada
             this.classList.add('selected');
+            this.setAttribute('aria-checked', 'true');
+            this.setAttribute('tabindex', '0');
+            this.focus();
+        });
+
+        // Soporte para navegación con teclado
+        option.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
         });
     });
     
